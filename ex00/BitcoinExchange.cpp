@@ -1,11 +1,7 @@
 #include "BitcoinExchange.hpp"
 
-Bitcoin::Bitcoin(char *file) {readData(); checkInput(file);}
-Bitcoin::Bitcoin( const Bitcoin& btc ) {*this = btc;}
-Bitcoin::~Bitcoin( void ) {}
-Bitcoin& Bitcoin::operator=( const Bitcoin& btc ) {this->_data = btc._data; return *this;}
-
-void Bitcoin::readData() {
+std::map<std::string, double> readData() {
+	std::map<std::string, double> _data;
 	std::ifstream file("data.csv");
     std::string line;
     // Skip first line
@@ -18,9 +14,10 @@ void Bitcoin::readData() {
         std::getline(ss, rate, ',');
         _data[date] = std::stod(rate);
     }
+	return _data;
 }
 
-void Bitcoin::checkInput(char *file) {
+void checkInput(char *file, std::map<std::string, double> data) {
 	// check if file exists
 	std::ifstream inputFile(file);
     if (!inputFile) {
@@ -44,25 +41,29 @@ void Bitcoin::checkInput(char *file) {
         char seperator;
         if(!(iss >> date >> seperator >> value) || seperator != '|')
 			std::cout << "Error: bad input => " << date << std::endl;
+		else if(!ifValidDate(date))
+			std::cout << "Error: bad input => " << date << std::endl;
 		else if(stod(value) < 0)
 			std::cout << "Error: not a positive number." << std::endl;
-		else if(stod(value) > MAX)
+		else if(stod(value) > 1000)
 			std::cout << "Error: too large a number." << std::endl;
-		else {
-			double mult = stod(value) * findRate(date);
+		else if (stod(value) < 1000 || stod(value) > 0) {
+			double mult = stod(value) * findRate(date, data);
 			std::cout << date << " => " << value << " = " << mult << std::endl;
 		}
+		else
+			std::cout << "Error: bad input => " << date << std::endl;
     }
     inputFile.close();
 }
 
-double Bitcoin::findRate(std::string date) {
-	std::map<std::string, double>::iterator it = _data.find(date);
-    if (it != _data.end()) {
+double findRate(std::string date, std::map<std::string, double> data) {
+	std::map<std::string, double>::iterator it = data.find(date);
+    if (it != data.end()) {
         return it->second;
     } else {
         std::string previousDay = moveDateBackOneDay(date);
-        return findRate(previousDay);
+        return findRate(previousDay, data);
     }
 }
 
@@ -106,6 +107,32 @@ std::string moveDateBackOneDay(const std::string& date) {
     return std::string(prev_date);
 }
 
+bool ifValidDate(const std::string& date) {
+    // Check that the input string has the correct length
+    if (date.length() != 10) {
+        return false;
+    }
+    // Check that the Year, Month, and Day components are valid integers
+    int year, month, day;
+    char separator1, separator2;
+    std::istringstream ss(date);
+    ss >> year >> separator1 >> month >> separator2 >> day;
+    if (ss.fail() || separator1 != '-' || separator2 != '-' ||
+        year < 0 || month < 1 || month > 12 || day < 1 || day > 31) {
+        return false;
+    }
+    // Check that the Month and Day components are valid for the given Year
+    bool leap_year = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    if ((month == 2 && (leap_year ? day > 29 : day > 28)) ||
+        ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)) {
+		std::cout << "idil" << std::endl;
+        return false;
+    }
+    // The input string is a valid date in the Year-Month-Day format
+    return true;
+}
+
+
 void printMap(const std::map<std::string, double>& map) {
     std::map<std::string, double>::const_iterator it;
     for (it = map.begin(); it != map.end(); ++it) {
@@ -113,24 +140,3 @@ void printMap(const std::map<std::string, double>& map) {
     }
     std::cout << std::endl;
 }
-
-std::map<std::string, double> Bitcoin::getData() {
-	return _data;
-}
-
-// double& Converter::getValued( void ) {
-// 	return _valued;
-// }
-
-// float& Converter::getValuef( void ) {
-// 	return _valuef;
-// }
-
-// int& Converter::getValuei( void ) {
-// 	return _valuei;
-// }
-
-// int& Converter::getType( void ) {
-// 	return _type;
-// }
-	

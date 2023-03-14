@@ -5,6 +5,7 @@ int main (int argc, char **argv) {
 		std::cout << "Error: could not open file."<< std::endl;
 		exit(1);
 	}
-	Bitcoin btc(argv[1]);
+	std::map<std::string, double> _data = readData();
+	checkInput(argv[1], _data);
 	return 0;
 }
