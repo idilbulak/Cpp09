@@ -16,9 +16,9 @@ void insertionSortVec(std::vector<int>& A, int p, int q);
 void mergeVec(std::vector<int>& A, int p, int q, int r);
 void mergeInsertVec(std::vector<int>& A, int p, int r);
 
-void insertionSortLst(std::list<int>& A, int p, int q) ;
-
-void mergeLst(std::list<int>& A, int p, int q, int r);
+void insertionSortList(std::list<int>& A, int p, int q);
+void mergeList(std::list<int>& A, int p, int q, int r) ;
+void mergeInsertList(std::list<int>& A, int p, int r);
 
 #endif
 

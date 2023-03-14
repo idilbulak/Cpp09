@@ -65,8 +65,7 @@ int main(int argc, char* argv[]) {
 
     // Sort with list and measure time
     std::clock_t start_lst = std::clock();
-    insertionSortLst(lst, 0, K);
-    mergeLst(lst, 0, K, nLst-1);
+    mergeInsertList(lst, 0 , nLst-1);
     std::clock_t end_lst = std::clock();
     double elapsed_lst = static_cast<double>(end_lst - start_lst) / CLOCKS_PER_SEC * 1000000;
 
