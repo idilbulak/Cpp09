@@ -63,6 +63,8 @@ double findRate(std::string date, std::map<std::string, double> data) {
         return it->second;
     } else {
         std::string previousDay = moveDateBackOneDay(date);
+        if (previousDay.compare("not valid date"))
+            return 0;
         return findRate(previousDay, data);
     }
 }
@@ -81,6 +83,9 @@ std::string moveDateBackOneDay(const std::string& date) {
         if (prev_month == 0) {
             prev_month = 12;
             prev_year = year - 1;
+            if (prev_year < 2009) {
+                return "not valid date";
+            }
         }
         switch (prev_month) {
             case 2:
