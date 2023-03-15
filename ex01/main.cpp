@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
+    if (argc != 2) {
         std::cout << "Error: No inverted Polish mathematical expression provided." << std::endl;
         return 1;
     }
@@ -39,6 +39,12 @@ int main(int argc, char* argv[]) {
             numbers.push(result);
         }
         else {
+            for(int i=0; token[i] !='\0'; i++) {
+                if(token[i] < 48 || token[i] > 57) {
+                    std::cout << "Error: bad input." << std::endl;
+                    return 1;
+                }
+            }
             int num = atoi(token.c_str());
             numbers.push(num);
         }

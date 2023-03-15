@@ -12,10 +12,12 @@ int main(int argc, char* argv[]) {
     // Parse input sequence and store in containers
     for (int i = 1; i < argc; i++) {
         try {
-            // for(int j=0; argv[i][j]!='\0';j++) {
-            //     if(argv[i][j] < 48)
-
-            // }
+            for(int j=0; argv[i][j]!='\0';j++) {
+                if(argv[i][j] < 48 || argv[i][j] > 57) {
+                    std::cout << "Error: bad input." << std::endl;
+                    return 1;
+                }
+            }
             int num = std::atoi(argv[i]);
             if (num <= 0) {
                 throw std::invalid_argument("Error: Input sequence must only contain positive integers.");
