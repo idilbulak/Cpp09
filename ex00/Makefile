@@ -1,6 +1,6 @@
 NAME			= btc
 CPP				= c++
-FLAGS			=  -Wall -Wextra -Werror -I -std=c++98
+FLAGS			= -Wall -Wextra -Werror -I -std=c++98
 SRC				= main.cpp BitcoinExchange.cpp
 INC				= BitcoinExchange.hpp
 OBJ_DIR			= obj

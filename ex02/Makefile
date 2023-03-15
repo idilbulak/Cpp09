@@ -1,6 +1,6 @@
 NAME			= PmergeMe
 CPP				= c++
-FLAGS			=  -I -std=c++98
+FLAGS			= -Wall -Wextra -Werror -I -std=c++98
 SRC				= sortVec.cpp sortList.cpp PmergeMe.cpp
 INC				= PmergeMe.hpp
 OBJ_DIR			= obj

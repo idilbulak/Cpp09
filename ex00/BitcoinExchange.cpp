@@ -41,7 +41,7 @@ void checkInput(char *file, std::map<std::string, double> data) {
         char seperator;
         if(!(iss >> date >> seperator >> value) || seperator != '|')
 			std::cout << "Error: bad input => " << date << std::endl;
-		else if(!ifValidDate(date))
+		else if(!ifValidDate(date) || !ifValidValue(value))
 			std::cout << "Error: bad input => " << date << std::endl;
 		else if(stod(value) < 0)
 			std::cout << "Error: not a positive number." << std::endl;
@@ -102,9 +102,16 @@ std::string moveDateBackOneDay(const std::string& date) {
         }
     }
     // Format the previous date as a string and return it
-    char prev_date[11];
-    snprintf(prev_date, 11, "%04d-%02d-%02d", prev_year, prev_month, prev_day);
-    return std::string(prev_date);
+    std::string prev_date = std::to_string(prev_year) + "-";
+    if (prev_month < 10)
+        prev_date += "0" + std::to_string(prev_month);
+    else
+        prev_date += std::to_string(prev_month);
+    if (prev_day < 10)
+        prev_date += "-0" + std::to_string(prev_day);
+    else
+        prev_date += "-" + std::to_string(prev_day);
+    return (prev_date);
 }
 
 bool ifValidDate(const std::string& date) {
@@ -132,6 +139,17 @@ bool ifValidDate(const std::string& date) {
     return true;
 }
 
+bool ifValidValue(const std::string& value) {
+    // Check that the input string has the correct length
+    try {
+            std::stof(value);
+        }
+        catch (const std::invalid_argument& e) {
+            // std::cout << e.what() << std::endl;
+            return false;
+        }
+    return true;
+}
 
 void printMap(const std::map<std::string, double>& map) {
     std::map<std::string, double>::const_iterator it;

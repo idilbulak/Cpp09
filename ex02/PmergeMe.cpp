@@ -1,18 +1,5 @@
 #include "PmergeMe.hpp"
 
-// void insertionSort(std::vector<int>& v) {
-//     int n = v.size();
-//     for (int i = 1; i < n; ++i) {
-//         int key = v[i];
-//         int j = i - 1;
-//         while (j >= 0 && v[j] > key) {
-//             v[j + 1] = v[j];
-//             --j;
-//         }
-//         v[j + 1] = key;
-//     }
-// }
-
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cerr << "Error: No input sequence provided." << std::endl;
@@ -25,6 +12,10 @@ int main(int argc, char* argv[]) {
     // Parse input sequence and store in containers
     for (int i = 1; i < argc; i++) {
         try {
+            // for(int j=0; argv[i][j]!='\0';j++) {
+            //     if(argv[i][j] < 48)
+
+            // }
             int num = std::atoi(argv[i]);
             if (num <= 0) {
                 throw std::invalid_argument("Error: Input sequence must only contain positive integers.");
